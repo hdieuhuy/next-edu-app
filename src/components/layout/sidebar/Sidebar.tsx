@@ -1,5 +1,4 @@
 import { BookIcon } from "@/components/icons";
-import DocumentIcon from "@/components/icons/DocumentIcon";
 import MenuLink from "@/components/ui/MenuLink";
 import { menuItems } from "@/constants";
 import React from "react";
