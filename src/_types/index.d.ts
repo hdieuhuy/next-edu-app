@@ -5,9 +5,10 @@ type TMenuLink = {
 };
 type TUserCreateData = {
   clerkId: string;
-  email_address: string;
-  name?: string;
+  email: string;
+  name: string;
   username?: string;
+  avatar?: string;
 };
 
 export { TMenuLink, TUserCreateData };

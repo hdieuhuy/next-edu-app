@@ -5,9 +5,9 @@ export interface IUser extends Document {
   clerkId: string;
   name: string;
   username: string;
-  email_address: string;
+  email: string;
   avatar: string;
-  createdAt: Date;
+  created_at: Date;
   status: EUserStatus;
   role: EUserRole;
   courses: Schema.Types.ObjectId[];
@@ -26,7 +26,7 @@ const userSchema = new Schema<IUser>({
     required: true,
     unique: true,
   },
-  email_address: {
+  email: {
     type: String,
     required: true,
     unique: true,
@@ -34,7 +34,7 @@ const userSchema = new Schema<IUser>({
   avatar: {
     type: String,
   },
-  createdAt: {
+  created_at: {
     type: Date,
     default: Date.now(),
   },
