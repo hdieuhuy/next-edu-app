@@ -1,16 +1,17 @@
 import { BookIcon } from "@/components/icons";
-import MenuLink from "@/components/ui/MenuLink";
+import { MenuLink } from "@/components/common";
 import { menuItems } from "@/constants";
+import Link from "next/link";
 import React from "react";
 
 function Sidebar() {
   return (
-    <div className="p-8 border-r-2 border-r-slate-100">
-      <div className="logo flex gap-2 mb-10">
+    <div className="py-5 px-8 bg-white dark:border-opacity-10 dark:bg-grayDarker">
+      <Link href="/" className="logo flex gap-2 mb-8">
         <BookIcon className="size-8 text-primary" />
 
-        <span className="text-primary text-bold text-2xl">HeroEdu</span>
-      </div>
+        <span className="font-bold text-primary text-2xl">HeroEdu</span>
+      </Link>
 
       <ul className="flex flex-col gap-4">
         {menuItems.map((item, index) => (

@@ -1,3 +1,10 @@
-import BookIcon from "./BookIcon";
-
-export { BookIcon };
+export { default as BookIcon } from "./BookIcon";
+export { default as DocumentIcon } from "./DocumentIcon";
+export { default as EarthIcon } from "./EarthIcon";
+export { default as UserListIcon } from "./UserListIcon";
+export { default as CourseIcon } from "./CourseIcon";
+export { default as CommentIcon } from "./CommentIcon";
+export { default as ArrowLeftIcon } from "./ArrowLeftIcon";
+export { default as ClockIcon } from "./ClockIcon";
+export { default as EyeIcon } from "./EyeIcon";
+export { default as StarIcon } from "./StarIcon";

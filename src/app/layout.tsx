@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "@/_styles/globals.css";
-import Sidebar from "@/components/layout/sidebar/Sidebar";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/themeProvider";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -16,14 +17,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={manrope.className}>
-        <div className="container h-screen grid grid-cols-[320px_minmax(0,1fr)]">
-          <Sidebar />
-
-          {children}
-        </div>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={manrope.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

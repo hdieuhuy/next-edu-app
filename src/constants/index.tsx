@@ -1,20 +1,37 @@
-import DocumentIcon from "@/components/icons/DocumentIcon";
-import EarthIcon from "@/components/icons/EarthIcon";
+import { TMenuLink } from "@/_types";
+import {
+  CommentIcon,
+  CourseIcon,
+  UserListIcon,
+  DocumentIcon,
+  EarthIcon,
+} from "@/components/icons";
 
-const menuItems: {
-  href: string;
-  title: string;
-  icon: React.ReactNode;
-}[] = [
+const menuItems: TMenuLink[] = [
   {
     href: "/",
+    title: "Khám phá",
+    icon: <EarthIcon />,
+  },
+  {
+    href: "/study",
     title: "Khu vực học tập",
     icon: <DocumentIcon />,
   },
   {
-    href: "/explore",
-    title: "Khám phá",
-    icon: <EarthIcon />,
+    href: "/manage/user",
+    title: "Quản lý thành viên",
+    icon: <UserListIcon />,
+  },
+  {
+    href: "/manage/course",
+    title: "Quản lý khoá học",
+    icon: <CourseIcon />,
+  },
+  {
+    href: "/manage/comment",
+    title: "Quản lý bình luận",
+    icon: <CommentIcon />,
   },
 ];
 
