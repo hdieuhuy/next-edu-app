@@ -13,6 +13,8 @@ function Header() {
       <div>Search Iput</div>
 
       <div className="flex items-center gap-4">
+        <ToggleTheme />
+
         {!userId ? (
           <Link
             href="/sign-in"
@@ -23,8 +25,6 @@ function Header() {
         ) : (
           <UserButton />
         )}
-
-        <ToggleTheme />
       </div>
     </div>
   );
