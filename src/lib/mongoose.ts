@@ -7,7 +7,8 @@ export default async function connectToDatabase() {
     throw new Error("Database isn't exists");
   }
   if (isConnected) {
-    throw new Error("Database is already connected");
+    console.log("Database is already connected");
+    return;
   }
   try {
     await mongoose.connect(process.env.MONGODB_URL, { dbName: "edu" });

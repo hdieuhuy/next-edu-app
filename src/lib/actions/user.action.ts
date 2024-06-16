@@ -14,4 +14,15 @@ async function createUser(data: TUserCreateData): Promise<IUser | undefined> {
   }
 }
 
-export { createUser };
+async function getUser(userId: string): Promise<IUser | null | undefined> {
+  try {
+    connectToDatabase();
+    const user = await User.findOne({ clerkId: userId });
+    if (!user) return null;
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { createUser, getUser };

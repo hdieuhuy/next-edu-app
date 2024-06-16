@@ -12,7 +12,6 @@ export interface IUser extends Document {
   role: EUserRole;
   courses: Schema.Types.ObjectId[];
 }
-
 const userSchema = new Schema<IUser>({
   clerkId: {
     type: String,
@@ -55,7 +54,5 @@ const userSchema = new Schema<IUser>({
     default: EUserStatus.UNACTIVE,
   },
 });
-
 const User = models.User || model("User", userSchema);
-
 export default User;

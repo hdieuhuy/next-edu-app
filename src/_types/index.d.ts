@@ -10,5 +10,8 @@ type TUserCreateData = {
   username?: string;
   avatar?: string;
 };
-
-export { TMenuLink, TUserCreateData };
+type TCreateCourseParams = {
+  title: string;
+  slug: string;
+};
+export { TMenuLink, TUserCreateData, TCreateCourseParams };
