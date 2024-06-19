@@ -18,9 +18,10 @@ import { useState } from "react";
 import { createSlug } from "@/lib/utils";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { createCourse } from "@/lib/actions/course.action";
+import { createCourse, updateCourse } from "@/lib/actions/course.action";
 import { ECourseLevel, ECourseStatus } from "@/_types/enums";
 import { Textarea } from "@/components/ui/textarea";
+import { ICourse } from "@/databases/corse.model";
 
 const formSchema = z.object({
   title: z.string().min(10, "Tên khóa học phải có ít nhất 10 ký tự"),
@@ -48,41 +49,67 @@ const formSchema = z.object({
   info: z.object({
     requirements: z.array(z.string()).optional(),
     benefits: z.array(z.string()).optional(),
-    qa: z.array(z.object({ question: z.string(), answer: z.string() })),
+    qa: z
+      .array(z.object({ question: z.string(), answer: z.string() }))
+      .optional(),
   }),
 });
 
-function CourseAddNew() {
+function CourseAddEditForm({ data }: { data: ICourse }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      slug: "",
-      price: 0,
-      sale_price: 0,
-      intro_url: "",
-      desc: "",
-      image: "",
-      status: ECourseStatus.PENDING,
-      level: ECourseLevel.BEGINNER,
-      views: 0,
-    },
+    defaultValues: data
+      ? { ...data }
+      : {
+          slug: "",
+          price: 0,
+          sale_price: 0,
+          intro_url: "",
+          desc: "",
+          image: "",
+          status: ECourseStatus.PENDING,
+          level: ECourseLevel.BEGINNER,
+          views: 0,
+        },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const data = {
-        title: values.title,
+      const inputs = {
+        ...values,
         slug: values.slug || createSlug(values.title),
       };
-      const res = await createCourse(data);
-      if (res?.success) {
+      if (data.slug === "create") {
+        const res = await createCourse(inputs);
         toast.success("Tạo khóa học thành công");
-      }
-      if (res?.data) {
-        router.push(`/manage/course/${res.data.slug}`);
+        if (!res?.success) {
+          toast.error(res?.message);
+          return;
+        }
+        if (res?.data) {
+          router.push(`/manage/course/${res.data.slug}`);
+        }
+      } else {
+        const res = await updateCourse({
+          slug: inputs.slug,
+          updateData: {
+            title: inputs.title,
+            slug: inputs.slug,
+            price: inputs.price,
+            sale_price: inputs.sale_price,
+            intro_url: inputs.intro_url,
+            desc: inputs.desc,
+            views: inputs.views,
+          },
+        });
+        toast.success("Cập nhật khóa học thành công");
+        if (!res?.success) {
+          toast.error(res?.message);
+          return;
+        }
       }
     } catch (error) {
       console.log(error);
@@ -94,7 +121,7 @@ function CourseAddNew() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
-        <div className="grid grid-cols-3 gap-8 mt-10 mb-8">
+        <div className="grid grid-cols-2 gap-8 mt-10 mb-8">
           <FormField
             control={form.control}
             name="title"
@@ -128,7 +155,12 @@ function CourseAddNew() {
               <FormItem>
                 <FormLabel>Giá khuyến mãi</FormLabel>
                 <FormControl>
-                  <Input placeholder="599.000" {...field} />
+                  <Input
+                    {...field}
+                    placeholder="599.000"
+                    type="number"
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -141,7 +173,12 @@ function CourseAddNew() {
               <FormItem>
                 <FormLabel>Giá gốc</FormLabel>
                 <FormControl>
-                  <Input placeholder="999.000" {...field} />
+                  <Input
+                    {...field}
+                    placeholder="999.000"
+                    type="number"
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -197,7 +234,12 @@ function CourseAddNew() {
               <FormItem>
                 <FormLabel>Lượt xem</FormLabel>
                 <FormControl>
-                  <Input placeholder="1000" type="number" {...field} />
+                  <Input
+                    {...field}
+                    placeholder="1000"
+                    type="number"
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -264,14 +306,13 @@ function CourseAddNew() {
             isLoading={isSubmitting}
             variant="primary"
             type="submit"
-            className="w-[120px]"
             disabled={isSubmitting}
           >
-            Tạo khóa học
+            {data ? "Cập nhật khoá học" : "Tạo khóa học"}
           </Button>
         </div>
       </form>
     </Form>
   );
 }
-export default CourseAddNew;
+export default CourseAddEditForm;

@@ -1,3 +1,5 @@
+import { ICourse } from "@/databases/corse.model";
+
 type TMenuLink = {
   href: string;
   title: string;
@@ -14,4 +16,8 @@ type TCreateCourseParams = {
   title: string;
   slug: string;
 };
-export { TMenuLink, TUserCreateData, TCreateCourseParams };
+type TUpdateCourseParams = {
+  slug: string;
+  updateData: Partial<ICourse>;
+};
+export { TMenuLink, TUserCreateData, TCreateCourseParams, TUpdateCourseParams };
