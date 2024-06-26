@@ -1,4 +1,5 @@
 import { TMenuLink } from "@/_types";
+import { ECourseLevel, ECourseStatus } from "@/_types/enums";
 import {
   CommentIcon,
   CourseIcon,
@@ -34,5 +35,46 @@ const menuItems: TMenuLink[] = [
     icon: <CommentIcon />,
   },
 ];
-
-export { menuItems };
+const courseStatusOptions: {
+  label: string;
+  value: ECourseStatus;
+}[] = [
+  {
+    label: "Chờ duyệt",
+    value: ECourseStatus.PENDING,
+  },
+  {
+    label: "Đã duyệt",
+    value: ECourseStatus.APPROVED,
+  },
+  {
+    label: "Từ chối",
+    value: ECourseStatus.REJECTED,
+  },
+];
+const courseLevelOptions: {
+  label: string;
+  value: ECourseLevel;
+  textStyle?: string;
+  bgStyle?: string;
+}[] = [
+  {
+    label: "Dễ",
+    value: ECourseLevel.BEGINNER,
+    textStyle: "text-green-500 font-semibold",
+    bgStyle: "bg-green-200 rounded-md",
+  },
+  {
+    label: "Trung bình",
+    value: ECourseLevel.INTERMEDIATE,
+    textStyle: "text-orange-500 font-semibold",
+    bgStyle: "bg-orange-200 rounded-md",
+  },
+  {
+    label: "Khó",
+    value: ECourseLevel.ADVANCED,
+    textStyle: "text-red-500 font-semibold",
+    bgStyle: "bg-red-200 rounded-md",
+  },
+];
+export { menuItems, courseStatusOptions, courseLevelOptions };

@@ -15,7 +15,11 @@ export async function getAllCourses(): Promise<ICourse[] | undefined> {
     console.log(error);
   }
 }
-export async function getCourseBySlug({ slug }: { slug: string }) {
+export async function getCourseBySlug({
+  slug,
+}: {
+  slug: string;
+}): Promise<ICourse | undefined> {
   try {
     connectToDatabase();
     const findCourse = await Course.findOne({ slug });
@@ -44,7 +48,11 @@ export async function createCourse(params: TCreateCourseParams) {
     console.log(error);
   }
 }
-export async function updateCourse({ slug, updateData }: TUpdateCourseParams) {
+export async function updateCourse({
+  slug,
+  path,
+  updateData,
+}: TUpdateCourseParams) {
   try {
     connectToDatabase();
     const findCourse = await Course.findOne({ slug });
@@ -52,7 +60,7 @@ export async function updateCourse({ slug, updateData }: TUpdateCourseParams) {
     await Course.findOneAndUpdate({ slug }, updateData, {
       new: true,
     });
-    revalidatePath("/");
+    revalidatePath(path || "/");
     return {
       success: true,
       message: "Cập nhật khóa học thành công!",
