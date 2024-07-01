@@ -36,7 +36,12 @@ const CourseItem = ({ data }: { data: ICourse }) => {
         </span>
       </Link>
       <div className="pt-4">
-        <h3 className="font-bold text-lg mb-3">{data.title}</h3>
+        <h3 className="font-bold text-lg mb-3 flex justify-between items-center">
+          {data.title}
+          <span className="font-bold text-primary ml-auto text-base">
+            {data.price.toLocaleString()}đ
+          </span>
+        </h3>
         <div className="flex items-center gap-3 mb-5 text-xs text-gray-500 dark:text-grayDark">
           {courseInfo.map((item, index) => (
             <div className="flex items-center gap-2" key={index}>
@@ -44,10 +49,6 @@ const CourseItem = ({ data }: { data: ICourse }) => {
               <span>{item.title}</span>
             </div>
           ))}
-
-          <span className="font-bold text-primary ml-auto text-base">
-            {data.price}
-          </span>
         </div>
 
         <Link

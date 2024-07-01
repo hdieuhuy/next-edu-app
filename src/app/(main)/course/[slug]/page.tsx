@@ -1,8 +1,15 @@
 import { ECourseStatus } from "@/_types/enums";
 import { DocumentIcon } from "@/components/icons";
 import { NotFound } from "@/components/layout";
+import {
+  AccordionContent,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { courseLevelOptions } from "@/constants";
+import { ILecture } from "@/databases/lecture.model";
 import { getCourseBySlug } from "@/lib/actions/course.action";
 import { PlayCircleIcon, User } from "lucide-react";
 import Image from "next/image";
@@ -19,6 +26,9 @@ const page = async ({
   });
   if (!data || data.status !== ECourseStatus.APPROVED) return <NotFound />;
   const videoId = data.intro_url?.split("v=")[1];
+  const lectures = data.lectures || [];
+  console.log(lectures);
+
   return (
     <div className="grid lg:grid-cols-[2fr,1fr] gap-10 min-h-screen">
       <div>
@@ -44,6 +54,27 @@ const page = async ({
         <h1 className="font-bold text-3xl mb-5">{data?.title}</h1>
         <BoxSection title="Mô tả">
           <div className="leading-normal">{data.desc}</div>
+        </BoxSection>
+        <BoxSection title="Nội dung bài học">
+          <div className="w-full flex flex-col gap-2">
+            {lectures.map((lecture: ILecture) => (
+              <Accordion
+                type="single"
+                collapsible
+                className="w-full"
+                key={lecture._id}
+              >
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>
+                    <div className="flex items-center gap-3 justify-between w-full pr-5">
+                      {lecture.title}
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent></AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            ))}
+          </div>
         </BoxSection>
         <BoxSection title="Thông tin">
           <div className="grid grid-cols-4 gap-5 mb-10">
@@ -107,10 +138,12 @@ const page = async ({
         <BoxSection title="Q.A">
           {data.info.qa.map(
             (qa: { question: string; answer: string }, index: number) => (
-              <div key={index}>
-                <div>{qa.question}</div>
-                <div>{qa.answer}</div>
-              </div>
+              <Accordion type="single" collapsible key={index}>
+                <AccordionItem value={qa.question}>
+                  <AccordionTrigger>{qa.question}</AccordionTrigger>
+                  <AccordionContent>{qa.answer}</AccordionContent>
+                </AccordionItem>
+              </Accordion>
             )
           )}
         </BoxSection>

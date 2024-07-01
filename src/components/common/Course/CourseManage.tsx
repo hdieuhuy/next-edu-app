@@ -23,6 +23,8 @@ import {
 
 import Image from "next/image";
 import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
   BookMarked,
   DeleteIcon,
   Edit2Icon,
@@ -30,7 +32,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import { ICourse } from "@/databases/corse.model";
-import { courseStatusOptions } from "@/constants";
+import { commonClassNames, courseStatusOptions } from "@/constants";
 import Link from "next/link";
 import { updateCourse } from "@/lib/actions/course.action";
 import { toast } from "react-toastify";
@@ -83,15 +85,35 @@ function CourseManage({ courses }: { courses: ICourse[] }) {
   }
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <Heading className="mb-5">Quản lý khoá học</Heading>
+      <div className="flex flex-col lg:flex-row lg:items-center gap-5 justify-between mb-4">
+        <Heading>Quản lý khoá học</Heading>
 
-        <div className="w-[300px]">
+        <div className="w-full lg:w-[300px]">
           <Input placeholder="Tìm kiếm khóa học..." />
         </div>
       </div>
 
-      <Table>
+      <Link
+        href="/manage/course/create"
+        className="size-10 rounded-full bg-primary flexCenter text-white fixed right-5 bottom-5 hover:animate-spin"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
+          />
+        </svg>
+      </Link>
+
+      <Table className="table-responsive">
         <TableHeader>
           <TableRow>
             <TableHead>Thông tin</TableHead>
@@ -124,7 +146,9 @@ function CourseManage({ courses }: { courses: ICourse[] }) {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{item.price.toLocaleString()}đ</TableCell>
+                <TableCell className="font-bold text-sm lg:text-base">
+                  {item.price.toLocaleString()}đ
+                </TableCell>
                 <TableCell
                   onClick={() => handleChangeStatus(item.slug, item.status)}
                   className="cursor-pointer"
@@ -136,30 +160,30 @@ function CourseManage({ courses }: { courses: ICourse[] }) {
                   <div className="flex gap-3">
                     <Link
                       href={`/manage/course/content/${item.slug}`}
-                      className="flex justify-center items-center p-2 border border-slate-300 rounded-lg hover:bg-gray-200 transition-all"
+                      className={commonClassNames.action}
                     >
                       <BookMarked className="size-4" />
                     </Link>
 
                     <Link
                       href={`/course/${item.slug}`}
-                      className="flex justify-center items-center p-2 border border-slate-300 rounded-lg hover:bg-gray-200 transition-all"
+                      className={commonClassNames.action}
                     >
                       <EyeIcon className="size-4" />
                     </Link>
 
                     <Link
                       href={`/manage/course/${item.slug}`}
-                      className="flex justify-center items-center p-2 border border-slate-300 rounded-lg hover:bg-gray-200 transition-all"
+                      className={commonClassNames.action}
                     >
                       <Edit2Icon className="size-4" />
                     </Link>
 
                     <AlertDialog>
                       <AlertDialogTrigger>
-                        <button className="flex justify-center items-center p-2 border border-slate-300 rounded-lg hover:bg-gray-200 transition-all">
+                        <span className={commonClassNames.action}>
                           <Trash2Icon className="size-4" />
-                        </button>
+                        </span>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
@@ -184,6 +208,23 @@ function CourseManage({ courses }: { courses: ICourse[] }) {
             ))}
         </TableBody>
       </Table>
+
+      <div className="flex justify-end gap-3 mt-5">
+        <button
+          className={
+            "size-8 rounded-md borderDarkMode bgDarkMode border flex items-center justify-center hover:border-primary transition-all hover:text-primary"
+          }
+        >
+          <ArrowLeftIcon className="size-5" />
+        </button>
+        <button
+          className={
+            "size-8 rounded-md borderDarkMode bgDarkMode border flex items-center justify-center hover:border-primary transition-all hover:text-primary"
+          }
+        >
+          <ArrowRightIcon className="size-5" />
+        </button>
+      </div>
     </div>
   );
 }

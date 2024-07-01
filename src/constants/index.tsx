@@ -77,4 +77,9 @@ const courseLevelOptions: {
     bgStyle: "bg-red-200 rounded-md",
   },
 ];
-export { menuItems, courseStatusOptions, courseLevelOptions };
+
+const commonClassNames = {
+  action:
+    "flex justify-center items-center p-2 border border-slate-300 rounded-lg hover:bg-gray-200 transition-all",
+};
+export { menuItems, courseStatusOptions, courseLevelOptions, commonClassNames };

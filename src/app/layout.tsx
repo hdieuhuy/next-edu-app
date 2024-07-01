@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
-import "@/_styles/globals.css";
+import "@/_styles/globals.scss";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/themeProvider";
 import { ToastContainer } from "react-toastify";
