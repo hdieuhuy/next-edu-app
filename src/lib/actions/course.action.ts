@@ -9,6 +9,7 @@ import {
 } from "@/_types";
 import { revalidatePath } from "next/cache";
 import Lecture, { ILecture } from "@/databases/lecture.model";
+import Lesson from "@/databases/lesson.model";
 
 // fetching
 export async function getAllCourses(): Promise<ICourse[] | undefined> {
@@ -33,6 +34,13 @@ export async function getCourseBySlug({
       select: "_id title",
       match: {
         _destroy: false,
+      },
+      populate: {
+        path: "lessons",
+        model: Lesson,
+        match: {
+          _destroy: false,
+        },
       },
     });
     return findCourse;

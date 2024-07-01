@@ -57,7 +57,7 @@ const page = async ({
         </BoxSection>
         <BoxSection title="Nội dung bài học">
           <div className="w-full flex flex-col gap-2">
-            {lectures.map((lecture: ILecture) => (
+            {lectures.map((lecture) => (
               <Accordion
                 type="single"
                 collapsible
@@ -70,7 +70,22 @@ const page = async ({
                       {lecture.title}
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent></AccordionContent>
+                  <AccordionContent className="!bg-transparent border-none p-0">
+                    <div className="flex flex-col gap-3">
+                      {lecture.lessons.map((lesson) => (
+                        <div
+                          key={lesson._id}
+                          className="flex items-center gap-3 bgDarkMode border borerDarkMode rounded-lg p-3 text-sm font-medium"
+                        >
+                          <PlayCircleIcon />
+                          <h4>{lesson.title}</h4>
+                          <span className="ml-auto text-xs font-semibold">
+                            {lesson.duration} phút
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             ))}

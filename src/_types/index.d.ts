@@ -1,4 +1,5 @@
 import { ICourse } from "@/databases/corse.model";
+import { ILesson } from "@/databases/lesson.model";
 
 type TMenuLink = {
   href: string;
@@ -39,7 +40,30 @@ type TUpdateLectureParams = {
   };
 };
 type TCourseLecture = Omit<ICourse, "lectures"> & {
-  lectures: ILecture[];
+  lectures: {
+    _id: string;
+    title: string;
+    lessons: ILesson[];
+  }[];
+};
+type TCreateLessonParams = {
+  lectureId: string;
+  courseId: string;
+  title?: string;
+  order?: number;
+  slug?: string;
+  path?: string;
+};
+type TUpdateLessonParams = {
+  lessonId: string;
+  updateData: {
+    title?: string;
+    slug?: string;
+    duration?: number;
+    video_url?: string;
+    content?: string;
+  };
+  path?: string;
 };
 export {
   TMenuLink,
@@ -49,4 +73,6 @@ export {
   TUpdateCourseParams,
   TCreateLectureParams,
   TUpdateLectureParams,
+  TCreateLessonParams,
+  TUpdateLessonParams,
 };
