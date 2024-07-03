@@ -1,4 +1,6 @@
 import { ECourseStatus } from "@/_types/enums";
+import LessonContent from "@/components/common/Lesson/LessonContent";
+import LessonItem from "@/components/common/Lesson/LessonItem";
 import { DocumentIcon } from "@/components/icons";
 import { NotFound } from "@/components/layout";
 import {
@@ -56,40 +58,11 @@ const page = async ({
           <div className="leading-normal">{data.desc}</div>
         </BoxSection>
         <BoxSection title="Nội dung bài học">
-          <div className="w-full flex flex-col gap-2">
-            {lectures.map((lecture) => (
-              <Accordion
-                type="single"
-                collapsible
-                className="w-full"
-                key={lecture._id}
-              >
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-3 justify-between w-full pr-5">
-                      {lecture.title}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="!bg-transparent border-none p-0">
-                    <div className="flex flex-col gap-3">
-                      {lecture.lessons.map((lesson) => (
-                        <div
-                          key={lesson._id}
-                          className="flex items-center gap-3 bgDarkMode border borerDarkMode rounded-lg p-3 text-sm font-medium"
-                        >
-                          <PlayCircleIcon />
-                          <h4>{lesson.title}</h4>
-                          <span className="ml-auto text-xs font-semibold">
-                            {lesson.duration} phút
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            ))}
-          </div>
+          <LessonContent
+            lectures={lectures}
+            courseSlug=""
+            lessonSlug=""
+          ></LessonContent>
         </BoxSection>
         <BoxSection title="Thông tin">
           <div className="grid grid-cols-4 gap-5 mb-10">
@@ -167,10 +140,10 @@ const page = async ({
         <div className="bg-white rounded-lg p-5 dark:bg-grayDarker dark:border-slate-500">
           <div className="flex items-center gap-2 mb-3">
             <strong className="text-primary text-xl font-bold ">
-              {data.price}
+              {data.price.toLocaleString()}đ
             </strong>
             <span className="text-slate-400 line-through text-sm ">
-              {data.sale_price}
+              {data.sale_price.toLocaleString()}đ
             </span>
             <span className="ml-auto inline-block px-3 py-1 rounded-lg bg-primary text-primary bg-opacity-10 font-semibold text-sm ">
               {Math.floor((data.price / data.sale_price) * 100)}%

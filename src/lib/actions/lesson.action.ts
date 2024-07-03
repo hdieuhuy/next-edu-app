@@ -42,7 +42,9 @@ export async function updateLesson(params: TUpdateLessonParams) {
     return {
       success: true,
     };
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 }
 export async function getLessonBySlug({
   slug,
@@ -58,5 +60,22 @@ export async function getLessonBySlug({
       course,
     });
     return findLesson;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function findAllLessons({
+  course,
+}: {
+  course: string;
+}): Promise<ILesson[] | undefined> {
+  try {
+    connectToDatabase();
+    const findLesson = await Lesson.find({
+      course,
+    });
+    return findLesson;
+  } catch (error) {
+    console.log(error);
+  }
 }

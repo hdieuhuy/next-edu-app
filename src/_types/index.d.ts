@@ -39,6 +39,11 @@ type TUpdateLectureParams = {
     path?: string;
   };
 };
+type TUpdateCourseLecture = {
+  _id: string;
+  title: string;
+  lessons: ILesson[];
+};
 type TCourseLecture = Omit<ICourse, "lectures"> & {
   lectures: {
     _id: string;
@@ -75,4 +80,5 @@ export {
   TUpdateLectureParams,
   TCreateLessonParams,
   TUpdateLessonParams,
+  TUpdateCourseLecture,
 };
