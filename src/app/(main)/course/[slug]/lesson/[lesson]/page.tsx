@@ -1,18 +1,14 @@
 import { Heading } from "@/components/common";
 import LessonContent from "@/components/common/Lesson/LessonContent";
-import LessonItem from "@/components/common/Lesson/LessonItem";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import PageNotFound from "@/app/not-found";
 import { Button } from "@/components/ui/button";
 import { getCourseBySlug } from "@/lib/actions/course.action";
 import { getHistory } from "@/lib/actions/history.action";
 import { findAllLessons, getLessonBySlug } from "@/lib/actions/lesson.action";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
+import { getUser } from "@/lib/actions/user.action";
 
 const LessonDetail = async ({
   params,
@@ -22,6 +18,10 @@ const LessonDetail = async ({
     lesson: string;
   };
 }) => {
+  const { userId } = auth();
+  if (!userId) return <PageNotFound />;
+  const findUser = await getUser(userId);
+  if (!findUser) return <PageNotFound />;
   const courseSlug = params.slug;
   const findCourse = await getCourseBySlug({ slug: courseSlug });
   const courseId = findCourse?._id.toString() || "";
@@ -30,6 +30,7 @@ const LessonDetail = async ({
     slug: params.lesson,
     course: courseId,
   });
+  if (!findUser.courses.includes(courseId as any)) return <PageNotFound />;
   const lessonList = (await findAllLessons({ course: courseId })) || [];
   const currentLessonIndex =
     lessonList.findIndex((item) => item.slug === params.lesson) || 0;
@@ -41,8 +42,6 @@ const LessonDetail = async ({
   const percentComplete = Math.floor(
     (histories.length / (lessonList.length || 1)) * 100
   );
-
-  console.log({ percentComplete });
 
   return (
     <div className="grid xl:grid-cols-[minmax(0,2fr),minmax(0,1fr)] gap-10 min-h-screen items-start">
