@@ -5,16 +5,20 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import LessonItem from "./LessonItem";
+
 import { TUpdateCourseLecture } from "@/_types";
+import { IHistory } from "@/databases/history.model";
 
 const LessonContent = ({
   lectures,
   courseSlug,
   lessonSlug,
+  histories = [],
 }: {
   lectures: TUpdateCourseLecture[];
   courseSlug: string;
   lessonSlug: string;
+  histories: IHistory[];
 }) => {
   return (
     <div className="flex flex-col gap-5">
@@ -36,13 +40,16 @@ const LessonContent = ({
                 {lecture.lessons.map((lesson) => (
                   <LessonItem
                     key={lesson._id}
-                    lesson={lesson}
+                    lesson={lesson ? JSON.parse(JSON.stringify(lesson)) : []}
                     url={
                       !courseSlug
                         ? ""
                         : `/course/${courseSlug}/lesson/${lesson.slug}`
                     }
                     isActive={!lessonSlug ? false : lesson.slug === lessonSlug}
+                    isChecked={histories.some(
+                      (el) => el.lesson.toString() === lesson._id.toString()
+                    )}
                   ></LessonItem>
                 ))}
               </div>

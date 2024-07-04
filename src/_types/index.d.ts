@@ -70,6 +70,13 @@ type TUpdateLessonParams = {
   };
   path?: string;
 };
+// History
+type TCreateHistoryParams = {
+  course: string;
+  lesson: string;
+  checked: boolean | string;
+  slug?: string;
+};
 export {
   TMenuLink,
   TUserCreateData,
@@ -81,4 +88,5 @@ export {
   TCreateLessonParams,
   TUpdateLessonParams,
   TUpdateCourseLecture,
+  TCreateHistoryParams,
 };
