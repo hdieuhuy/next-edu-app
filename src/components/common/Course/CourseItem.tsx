@@ -2,7 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { ClockIcon, EyeIcon, StarIcon } from "@/components/icons";
 import { ICourse } from "@/databases/corse.model";
-const CourseItem = ({ data }: { data: ICourse }) => {
+import { commonClassNames } from "@/constants";
+const CourseItem = ({
+  data,
+  cta,
+  url,
+}: {
+  data: ICourse;
+  cta?: string;
+  url?: string;
+}) => {
   const courseInfo = [
     {
       title: data.views,
@@ -19,9 +28,10 @@ const CourseItem = ({ data }: { data: ICourse }) => {
       ),
     },
   ];
+  const courseUrl = url || `/course/${data.slug}`;
   return (
-    <div className="bg-white border border-gray-200 p-4 rounded-2xl dark:bg-grayDarker dark:border-opacity-10">
-      <Link href={`/course/${data.slug}`} className="block h-[180px] relative">
+    <div className="bg-white border border-gray-200 p-4 rounded-2xl dark:bg-grayDarker dark:border-opacity-10  flex flex-col">
+      <Link href={courseUrl} className="block h-[180px] relative">
         <Image
           src={data.image}
           alt=""
@@ -35,11 +45,11 @@ const CourseItem = ({ data }: { data: ICourse }) => {
           New
         </span>
       </Link>
-      <div className="pt-4">
+      <div className="pt-4 flex flex-col flex-1">
         <h3 className="font-bold text-lg mb-3 flex items-center">
           {data.title}
         </h3>
-        <div className="flex items-center justify-between">
+        <div className="mt-auto flex justify-between items-center">
           <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-grayDark">
             {courseInfo.map((item, index) => (
               <div className="flex items-center gap-2" key={index}>
@@ -49,16 +59,13 @@ const CourseItem = ({ data }: { data: ICourse }) => {
             ))}
           </div>
 
-          <span className="font-bold text-primary ml-auto text-base">
+          <span className="font-bold text-primary text-base">
             {data.price.toLocaleString()}đ
           </span>
         </div>
 
-        <Link
-          href={`/course/${data.slug}`}
-          className="flex items-center justify-center w-full mt-5 rounded-lg text-white font-semibold bg-primary h-12"
-        >
-          Xem chi tiết
+        <Link href={courseUrl} className={commonClassNames.btnPrimary}>
+          {cta || "Xem chi tiết"}
         </Link>
       </div>
     </div>

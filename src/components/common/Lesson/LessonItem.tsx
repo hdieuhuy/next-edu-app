@@ -39,7 +39,7 @@ function LessonItem({
     <div
       className={cn(
         "flex items-center gap-2 bgDarkMode border borderDarkMode rounded-lg p-4 font-medium text-sm",
-        isActive ? "text-primary font-semibold" : ""
+        isActive ? "font-bold" : ""
       )}
     >
       {url && (

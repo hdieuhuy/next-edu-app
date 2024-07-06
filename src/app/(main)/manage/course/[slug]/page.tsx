@@ -17,7 +17,10 @@ async function AddEditCoursePage({ params }: { params: { slug: string } }) {
         {isTypeCreate ? "Tạo khoá học mới" : "Cập nhật khoá học"}
       </Heading>
 
-      <CourseAddEditForm data={JSON.parse(JSON.stringify(coures))} />
+      <CourseAddEditForm
+        data={JSON.parse(JSON.stringify(coures))}
+        params={slug}
+      />
     </div>
   );
 }

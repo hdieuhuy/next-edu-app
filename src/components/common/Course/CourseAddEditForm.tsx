@@ -34,6 +34,7 @@ import { PlusCircleIcon } from "lucide-react";
 import { courseLevelOptions, courseStatusOptions } from "@/constants";
 import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
+import slugify from "slugify";
 
 const formSchema = z.object({
   title: z.string().min(10, "Tên khóa học phải có ít nhất 10 ký tự"),
@@ -67,7 +68,13 @@ const formSchema = z.object({
   }),
 });
 
-function CourseAddEditForm({ data }: { data: ICourse }) {
+function CourseAddEditForm({
+  data,
+  params,
+}: {
+  data: ICourse;
+  params?: string;
+}) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [courseInfo, setCourseInfo] = useImmer({
@@ -103,9 +110,15 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
     try {
       const inputs = {
         ...values,
-        slug: values.slug || createSlug(values.title),
+        slug: values.slug || slugify(values.title, { lower: true }),
+        info: {
+          requirements: courseInfo.requirements,
+          benefits: courseInfo.benefits,
+          qa: courseInfo.qa,
+        },
       };
-      if (data.slug === "create") {
+
+      if (params === "create") {
         const res = await createCourse(inputs);
         toast.success("Tạo khóa học thành công");
         if (!res?.success) {
@@ -225,7 +238,7 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
                   <Textarea
                     placeholder="Nhập mô tả..."
                     {...field}
-                    className="h-[200px]"
+                    className="h-[250px]"
                   />
                 </FormControl>
                 <FormMessage />
@@ -239,7 +252,7 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
               <FormItem>
                 <FormLabel>Ảnh đại diện</FormLabel>
                 <FormControl>
-                  <div className="h-[200px] bg-white rounded-md border border-gray-200 flex justify-center items-center relative">
+                  <div className="h-[250px] bg-white rounded-md border border-gray-200 flex justify-center items-center relative">
                     {imageWatch ? (
                       <Image
                         alt="form-image"
@@ -312,7 +325,7 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
                     </SelectTrigger>
                     <SelectContent>
                       {courseStatusOptions.map(({ label, value }) => (
-                        <SelectItem value={value} key={value}>
+                        <SelectItem value={value} key={`status-${value}`}>
                           {label}
                         </SelectItem>
                       ))}
@@ -339,7 +352,7 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
                     </SelectTrigger>
                     <SelectContent>
                       {courseLevelOptions.map(({ label, value }) => (
-                        <SelectItem value={value} key={value}>
+                        <SelectItem value={value} key={`level-${value}`}>
                           {label}
                         </SelectItem>
                       ))}
@@ -373,7 +386,7 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
                   <>
                     {courseInfo.requirements.map((r, index) => (
                       <Input
-                        key={index}
+                        key={`requirment-${index}`}
                         placeholder={`Yêu cầu số ${index + 1}`}
                         value={r}
                         onChange={(e) => {
@@ -412,7 +425,7 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
                   <>
                     {courseInfo.benefits.map((r, index) => (
                       <Input
-                        key={index}
+                        key={`benefit-${index}`}
                         placeholder={`Lợi ích số ${index + 1}`}
                         value={r}
                         onChange={(e) => {
@@ -453,9 +466,12 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
                 <FormControl>
                   <>
                     {courseInfo.qa.map((item, index) => (
-                      <div className="grid grid-cols-2 gap-5" key={index}>
+                      <div
+                        className="grid grid-cols-2 gap-5"
+                        key={`qa-${index}`}
+                      >
                         <Input
-                          key={index}
+                          key={`q-input-${index}`}
                           placeholder={`Câu hỏi số ${index + 1}`}
                           value={item.question}
                           onChange={(e) => {
@@ -465,7 +481,7 @@ function CourseAddEditForm({ data }: { data: ICourse }) {
                           }}
                         />
                         <Input
-                          key={index}
+                          key={`a-input-${index}`}
                           placeholder={`Câu trả lời số ${index + 1}`}
                           value={item.answer}
                           onChange={(e) => {

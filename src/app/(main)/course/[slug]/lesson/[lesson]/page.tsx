@@ -9,6 +9,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { getUser } from "@/lib/actions/user.action";
+import LessonSaveUrl from "./LessonSaveUrl";
 
 const LessonDetail = async ({
   params,
@@ -45,6 +46,10 @@ const LessonDetail = async ({
 
   return (
     <div className="grid xl:grid-cols-[minmax(0,2fr),minmax(0,1fr)] gap-10 min-h-screen items-start">
+      <LessonSaveUrl
+        course={courseSlug}
+        url={`/course/${courseSlug}/lesson/${params.lesson}`}
+      ></LessonSaveUrl>
       <div>
         <div className="relative mb-5 aspect-video">
           <iframe
@@ -83,7 +88,7 @@ const LessonDetail = async ({
         <div className="flex items-center gap-2 mb-2">
           <div className="h-3 w-full rounded-full border borderDarkMode bgDarkMode">
             <div
-              className={`h-full rounded-full bg-primary transition-all`}
+              className={`h-full rounded-full bg-gradient-to-r from-primary to-secondary w-0 transition-all duration-300`}
               style={{
                 width: `${percentComplete}%`,
               }}

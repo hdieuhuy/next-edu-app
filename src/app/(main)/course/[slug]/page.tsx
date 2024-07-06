@@ -55,7 +55,9 @@ const page = async ({
         </div>
         <h1 className="font-bold text-3xl mb-5">{data?.title}</h1>
         <BoxSection title="Mô tả">
-          <div className="leading-normal">{data.desc}</div>
+          <div className="leading-normal bg-white p-4 rounded-md dark:bg-grayDarker">
+            {data.desc}
+          </div>
         </BoxSection>
         <BoxSection title="Nội dung bài học">
           <LessonContent

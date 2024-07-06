@@ -81,6 +81,8 @@ const courseLevelOptions: {
 const commonClassNames = {
   action:
     "flex justify-center items-center p-2 border border-slate-300 rounded-lg hover:bg-gray-200 transition-all",
+  btnPrimary:
+    "flex items-center justify-center w-full mt-10 rounded-lg text-white font-semibold bg-primary h-12 button-primary",
 };
 
 const editorOptions = (field: any, theme: any) => ({

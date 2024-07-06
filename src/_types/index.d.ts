@@ -77,6 +77,11 @@ type TCreateHistoryParams = {
   checked: boolean | string;
   slug?: string;
 };
+// LocalStorage
+type TLessonUserStuyding = {
+  course: string;
+  lesson: string;
+};
 export {
   TMenuLink,
   TUserCreateData,
@@ -89,4 +94,5 @@ export {
   TUpdateLessonParams,
   TUpdateCourseLecture,
   TCreateHistoryParams,
+  TLessonUserStuyding,
 };
