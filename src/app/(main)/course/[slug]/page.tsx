@@ -29,7 +29,6 @@ const page = async ({
   if (!data || data.status !== ECourseStatus.APPROVED) return <NotFound />;
   const videoId = data.intro_url?.split("v=")[1];
   const lectures = data.lectures || [];
-  console.log(lectures);
 
   return (
     <div className="grid lg:grid-cols-[2fr,1fr] gap-10 min-h-screen">

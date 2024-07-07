@@ -49,7 +49,7 @@ function LessonItem({
           onCheckedChange={(checked) => handleCompleteLesson(checked)}
         />
       )}
-      <PlayCircleIcon />
+      <PlayCircleIcon className="size-5" />
       {url ? (
         <Link href={url} className="line-clamp-1">
           {lesson.title}
