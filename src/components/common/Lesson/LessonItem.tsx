@@ -51,7 +51,7 @@ function LessonItem({
       )}
       <PlayCircleIcon />
       {url ? (
-        <Link href={url} className="line-clamp-1 pointer-events-none">
+        <Link href={url} className="line-clamp-1">
           {lesson.title}
         </Link>
       ) : (

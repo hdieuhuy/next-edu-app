@@ -58,7 +58,7 @@ const LessonDetail = async ({
           ></iframe>
         </div>
         <div className="flex items-center justify-between mb-5">
-          <div className="flex gap-3">
+          <div className="flex gap-3 justify-between w-full">
             <Button className="size-8 p-2" disabled={!prevLesson}>
               <Link href={`/course/${courseSlug}/lesson/${prevLesson?.slug}`}>
                 <ArrowLeftIcon className="size-4" />
