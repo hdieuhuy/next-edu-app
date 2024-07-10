@@ -80,6 +80,22 @@ export async function findAllLessons({
   }
 }
 
+export async function getLectureByLesson({
+  lessonSlug,
+}: {
+  lessonSlug: string;
+}): Promise<{ lecture: string } | undefined> {
+  try {
+    connectToDatabase();
+    const findLesson = await Lesson.findOne({
+      slug: lessonSlug,
+    }).select("lecture");
+    return findLesson;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function countLessonByCourse({
   courseId,
 }: {

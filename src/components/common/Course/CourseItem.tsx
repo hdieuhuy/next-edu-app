@@ -52,7 +52,7 @@ const CourseItem = ({
         <div className="mt-auto flex justify-between items-center">
           <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-grayDark">
             {courseInfo.map((item, index) => (
-              <div className="flex items-center gap-2" key={index}>
+              <div className="flex items-center gap-1" key={index}>
                 {item.icon("size-4")}
                 <span>{item.title}</span>
               </div>

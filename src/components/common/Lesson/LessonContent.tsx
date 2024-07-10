@@ -8,8 +8,9 @@ import LessonItem from "./LessonItem";
 
 import { TUpdateCourseLecture } from "@/_types";
 import { IHistory } from "@/databases/history.model";
+import { getLectureByLesson } from "@/lib/actions/lesson.action";
 
-const LessonContent = ({
+const LessonContent = async ({
   lectures,
   courseSlug,
   lessonSlug,
@@ -20,6 +21,12 @@ const LessonContent = ({
   lessonSlug: string;
   histories?: IHistory[];
 }) => {
+  const currentLesson = await getLectureByLesson({
+    lessonSlug,
+  });
+
+  if (!currentLesson) return null;
+
   return (
     <div className="flex flex-col gap-5">
       {lectures.map((lecture: TUpdateCourseLecture) => (
@@ -28,6 +35,7 @@ const LessonContent = ({
           collapsible
           className="w-full"
           key={lecture._id}
+          defaultValue={currentLesson.lecture}
         >
           <AccordionItem value={lecture._id.toString()}>
             <AccordionTrigger>

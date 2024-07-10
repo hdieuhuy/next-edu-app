@@ -22,6 +22,7 @@ import { useTheme } from "next-themes";
 import { editorOptions } from "@/constants";
 import { useRef } from "react";
 import { TCourseLecture } from "@/_types";
+import slugify from "slugify";
 
 const formSchema = z.object({
   slug: z.string().optional(),
@@ -53,7 +54,14 @@ const LessonItemUpdate = ({
     try {
       const res = await updateLesson({
         lessonId: lesson._id,
-        updateData: values,
+        updateData: {
+          ...values,
+          slug: slugify(values.slug || lesson.title, {
+            locale: "vi",
+            lower: true,
+            remove: /:?\/\/=/,
+          }),
+        },
       });
       if (res?.success) {
         toast.success("Cập nhật bài học thành công");
