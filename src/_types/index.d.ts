@@ -14,6 +14,7 @@ type TUserCreateData = {
   username?: string;
   avatar?: string;
 };
+// Course
 type TCreateCourseParams = {
   title: string;
   slug: string;
@@ -22,6 +23,12 @@ type TUpdateCourseParams = {
   slug: string;
   updateData: Partial<ICourse>;
   path?: string;
+};
+type TGetAllCourseParams = {
+  page: number;
+  limit: number;
+  search?: string;
+  status?: string;
 };
 // Lecture
 type TCreateLectureParams = {
@@ -94,5 +101,6 @@ export {
   TUpdateLessonParams,
   TUpdateCourseLecture,
   TCreateHistoryParams,
+  TGetAllCourseParams,
   TLessonUserStuyding,
 };

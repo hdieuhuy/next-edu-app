@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   Table,
   TableBody,
@@ -14,7 +14,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -26,7 +25,6 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   BookMarked,
-  DeleteIcon,
   Edit2Icon,
   EyeIcon,
   Trash2Icon,
@@ -39,8 +37,65 @@ import { toast } from "react-toastify";
 import { ECourseStatus } from "@/_types/enums";
 import Heading from "../Typography/Heading";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { debounce } from "lodash";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 function CourseManage({ courses }: { courses: ICourse[] }) {
+  const [page, setPage] = useState(1);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+  const handleSearchCourse = debounce(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      router.push(`${pathname}?${createQueryString("search", e.target.value)}`);
+    },
+    500
+  );
+  const handleSelectStatus = (value: ECourseStatus) => {
+    router.push(`${pathname}?${createQueryString("status", value)}`);
+  };
+  const handleChangePage = (type: "next" | "prev") => {
+    if (type === "prev" && page === 1) return;
+
+    if (type === "next")
+      return setPage((prev) => {
+        const _page = prev + 1;
+        router.push(
+          `${pathname}?${createQueryString("page", _page.toString())}`
+        );
+
+        return _page;
+      });
+
+    if (type === "prev")
+      return setPage((prev) => {
+        const _page = prev - 1;
+        router.push(
+          `${pathname}?${createQueryString("page", _page.toString())}`
+        );
+
+        return _page;
+      });
+  };
+
   async function handleDeleteCourse(slug: string) {
     try {
       const res = await updateCourse({
@@ -83,13 +138,36 @@ function CourseManage({ courses }: { courses: ICourse[] }) {
       console.log(error);
     }
   }
+
   return (
     <div>
       <div className="flex flex-col lg:flex-row lg:items-center gap-5 justify-between mb-4">
         <Heading>Quản lý khoá học</Heading>
 
-        <div className="w-full lg:w-[300px]">
-          <Input placeholder="Tìm kiếm khóa học..." />
+        <div className="w-full lg:w-[340px] flex gap-2 items-center">
+          <Input
+            placeholder="Tìm kiếm khóa học..."
+            onChange={(e) => handleSearchCourse(e)}
+          />
+
+          <div className="w-[240px]">
+            <Select
+              onValueChange={(value) =>
+                handleSelectStatus(value as ECourseStatus)
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Trạng thái" />
+              </SelectTrigger>
+              <SelectContent>
+                {courseStatusOptions.map(({ label, value }) => (
+                  <SelectItem value={value} key={`status-${value}`}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -215,14 +293,20 @@ function CourseManage({ courses }: { courses: ICourse[] }) {
             "size-8 rounded-md borderDarkMode bgDarkMode border flex items-center justify-center hover:border-primary transition-all hover:text-primary"
           }
         >
-          <ArrowLeftIcon className="size-5" />
+          <ArrowLeftIcon
+            className="size-5"
+            onClick={() => handleChangePage("prev")}
+          />
         </button>
         <button
           className={
             "size-8 rounded-md borderDarkMode bgDarkMode border flex items-center justify-center hover:border-primary transition-all hover:text-primary"
           }
         >
-          <ArrowRightIcon className="size-5" />
+          <ArrowRightIcon
+            className="size-5"
+            onClick={() => handleChangePage("next")}
+          />
         </button>
       </div>
     </div>
