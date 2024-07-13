@@ -1,10 +1,13 @@
 import React from "react";
 
 import { CourseGrid, CourseItem, Heading } from "@/components/common";
-import { getAllCourses } from "@/lib/actions/course.action";
+import {
+  getAllCourses,
+  getAllCoursesPublic,
+} from "@/lib/actions/course.action";
 
 export default async function Home() {
-  const courses = await getAllCourses();
+  const courses = (await getAllCoursesPublic({})) || [];
 
   return (
     <div>
