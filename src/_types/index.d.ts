@@ -89,6 +89,16 @@ type TLessonUserStuyding = {
   course: string;
   lesson: string;
 };
+// Order
+type TCreateOrderParams = {
+  code: string;
+  course: string;
+  user: string;
+  total?: number;
+  amount?: number;
+  discount?: number;
+  coupon?: string;
+};
 export {
   TMenuLink,
   TUserCreateData,
@@ -103,4 +113,5 @@ export {
   TCreateHistoryParams,
   TGetAllCourseParams,
   TLessonUserStuyding,
+  TCreateOrderParams,
 };

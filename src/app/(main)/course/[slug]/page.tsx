@@ -13,8 +13,13 @@ import { Button } from "@/components/ui/button";
 import { courseLevelOptions } from "@/constants";
 import { ILecture } from "@/databases/lecture.model";
 import { getCourseBySlug } from "@/lib/actions/course.action";
+import { getUser } from "@/lib/actions/user.action";
+import { auth } from "@clerk/nextjs/server";
 import { PlayCircleIcon, User } from "lucide-react";
 import Image from "next/image";
+import ButtonEnroll from "./ButtonEnroll";
+import AlreadyEnroll from "./AlreadyEnroll";
+import CourseWidget from "./CourseWidget";
 
 const page = async ({
   params,
@@ -29,6 +34,9 @@ const page = async ({
   if (!data || data.status !== ECourseStatus.APPROVED) return <NotFound />;
   const videoId = data.intro_url?.split("v=")[1];
   const lectures = data.lectures || [];
+  const { userId } = auth();
+  const findUser = await getUser(userId || "");
+  const userCourses = findUser?.courses.map((c) => c.toString());
 
   return (
     <div className="grid lg:grid-cols-[2fr,1fr] gap-10 min-h-screen">
@@ -137,43 +145,14 @@ const page = async ({
           )}
         </BoxSection>
       </div>
-      <div>
-        <div className="bg-white rounded-lg p-5 dark:bg-grayDarker dark:border-slate-500">
-          <div className="flex items-center gap-2 mb-3">
-            <strong className="text-primary text-xl font-bold ">
-              {data.price.toLocaleString()}đ
-            </strong>
-            <span className="text-slate-400 line-through text-sm ">
-              {data.sale_price.toLocaleString()}đ
-            </span>
-            <span className="ml-auto inline-block px-3 py-1 rounded-lg bg-primary text-primary bg-opacity-10 font-semibold text-sm ">
-              {Math.floor((data.price / data.sale_price) * 100)}%
-            </span>
-          </div>
-          <h3 className="font-bold mb-3 text-sm">Khóa học gồm có:</h3>
-          <ul className="mb-5 flex flex-col gap-2 text-sm text-slate-500 dark:text-white">
-            <li className="flex items-center gap-2">
-              <PlayCircleIcon className="size-4" />
-              <span>30h học</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <PlayCircleIcon className="size-4" />
-              <span>Video Full HD</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <User className="size-4" />
-              <span>Có nhóm hỗ trợ</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <DocumentIcon className="size-4" />
-              <span>Tài liệu kèm theo</span>
-            </li>
-          </ul>
-          <Button variant="primary" className="w-full">
-            Mua khóa học
-          </Button>
-        </div>
-      </div>
+      {userCourses?.includes(data._id.toString()) ? (
+        <AlreadyEnroll></AlreadyEnroll>
+      ) : (
+        <CourseWidget
+          findUser={findUser ? JSON.parse(JSON.stringify(findUser)) : null}
+          data={data ? JSON.parse(JSON.stringify(data)) : null}
+        ></CourseWidget>
+      )}
     </div>
   );
 };

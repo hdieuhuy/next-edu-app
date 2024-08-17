@@ -26,3 +26,6 @@ export function createSlug(str: string) {
 
   return slug;
 }
+
+export const createOrderCode = () =>
+  `ORDER-${new Date().getTime().toString().slice(-6)}`;

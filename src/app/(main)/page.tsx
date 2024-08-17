@@ -1,10 +1,9 @@
 import React from "react";
 
 import { CourseGrid, CourseItem, Heading } from "@/components/common";
-import {
-  getAllCourses,
-  getAllCoursesPublic,
-} from "@/lib/actions/course.action";
+import { getAllCoursesPublic } from "@/lib/actions/course.action";
+
+import "sweetalert2/src/sweetalert2.scss";
 
 export default async function Home() {
   const courses = (await getAllCoursesPublic({})) || [];

@@ -1,5 +1,10 @@
 import { TMenuLink } from "@/_types";
-import { ECourseLevel, ECourseStatus } from "@/_types/enums";
+import {
+  ECouponType,
+  ECourseLevel,
+  ECourseStatus,
+  EOrderStatus,
+} from "@/_types/enums";
 import {
   CommentIcon,
   CourseIcon,
@@ -7,6 +12,7 @@ import {
   DocumentIcon,
   EarthIcon,
 } from "@/components/icons";
+import { DatabaseZapIcon } from "lucide-react";
 
 const menuItems: TMenuLink[] = [
   {
@@ -28,6 +34,11 @@ const menuItems: TMenuLink[] = [
     href: "/manage/course",
     title: "Quản lý khoá học",
     icon: <CourseIcon />,
+  },
+  {
+    href: "/manage/order",
+    title: "Quản lý đơn hàng",
+    icon: <DatabaseZapIcon />,
   },
   {
     href: "/manage/comment",
@@ -79,10 +90,14 @@ const courseLevelOptions: {
 ];
 
 const commonClassNames = {
+  status:
+    "bg-opacity-10 border border-current rounded-md font-medium px-3 py-1 text-xs whitespace-nowrap",
   action:
-    "flex justify-center items-center p-2 border border-slate-300 rounded-lg hover:bg-gray-200 transition-all",
+    "size-8 rounded-md border flex items-center justify-center p-2  text-gray-500 hover:border-opacity-80 dark:bg-transparent borderDarkMode dark:hover:border-opacity-20",
+  paginationButton:
+    "size-10 rounded-md borderDarkMode bgDarkMode border flex items-center justify-center hover:border-primary transition-all hover:text-primary p-2.5",
   btnPrimary:
-    "flex items-center justify-center w-full mt-10 rounded-lg text-white font-semibold bg-primary h-12 button-primary",
+    "flex items-center justify-center w-full mt-10 rounded-lg text-white font-bold bg-primary h-12 button-primary",
 };
 
 const editorOptions = (field: any, theme: any) => ({
@@ -123,10 +138,47 @@ const editorOptions = (field: any, theme: any) => ({
   },
 });
 
+const orderStatus: {
+  title: string;
+  value: EOrderStatus;
+  className?: string;
+}[] = [
+  {
+    title: "Đã duyệt",
+    value: EOrderStatus.COMPLETED,
+    className: "text-green-500 bg-green-500",
+  },
+  {
+    title: "Chờ duyệt",
+    value: EOrderStatus.PENDING,
+    className: "text-orange-500 bg-orange-500",
+  },
+  {
+    title: "Đã huỷ",
+    value: EOrderStatus.CANCELED,
+    className: "text-red-500 bg-red-500",
+  },
+];
+
+export const couponTypes: {
+  title: string;
+  value: ECouponType;
+}[] = [
+  {
+    title: "Phần trăm",
+    value: ECouponType.PERCENT,
+  },
+  {
+    title: "Giá trị",
+    value: ECouponType.AMOUNT,
+  },
+];
+
 export {
   menuItems,
   courseStatusOptions,
   courseLevelOptions,
   commonClassNames,
   editorOptions,
+  orderStatus,
 };
