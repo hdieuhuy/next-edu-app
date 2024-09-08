@@ -100,12 +100,20 @@ type TCreateOrderParams = {
   discount?: number;
   coupon?: string;
 };
-type TCreateCouponParams = Omit<ICoupon, "_id created_at">;
-type TCouponParams = Omit<ICoupon, "courses"> & {
-  courses: {
-    _id: string;
-    title: string;
-  }[];
+type TCreateCouponParams = {
+  title: string;
+  code: string;
+  type: ECouponType;
+  value?: number;
+  start_date?: Date;
+  end_date?: Date;
+  active?: boolean;
+  limit?: number;
+  courses?: string[];
+};
+type TUpdateCouponParams = {
+  _id: string;
+  updateData: Partial<TCreateCouponParams>;
 };
 export {
   TMenuLink,

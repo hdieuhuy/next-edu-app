@@ -8,6 +8,14 @@ import { TCouponParams } from "@/_types";
 export async function createCoupon(params: any) {
   try {
     connectToDatabase();
+    const existingCoupon = await Coupon.findOne({ code: params.code });
+    if (existingCoupon?.code) {
+      return { error: "Mã giảm giá đã tồn tại!" };
+    }
+    const couponRegex = /^[A-Z0-9]{3,10}$/;
+    if (!couponRegex.test(params.code)) {
+      return { error: "Mã giảm giá không hợp lệ" };
+    }
     const newCoupon = await Coupon.create(params);
     return JSON.parse(JSON.stringify(newCoupon));
   } catch (error) {

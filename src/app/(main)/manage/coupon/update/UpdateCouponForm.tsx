@@ -22,10 +22,9 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import { couponTypes } from "@/constants";
-import { createCoupon, updateCoupon } from "@/lib/actions/coupon.actions";
+import { couponFormSchema, couponTypes } from "@/constants";
+import { updateCoupon } from "@/lib/actions/coupon.actions";
 import { format } from "date-fns";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CalendarIcon, X } from "lucide-react";
@@ -34,33 +33,16 @@ import { TCouponParams } from "@/_types";
 import { debounce } from "lodash";
 import { getAllCourses } from "@/lib/actions/course.action";
 import { Checkbox } from "@/components/ui/checkbox";
-const formSchema = z.object({
-  title: z.string({
-    message: "Tiêu đề không được để trống",
-  }),
-  code: z
-    .string({
-      message: "Mã giảm giá không được để trống",
-    })
-    .min(3, "Mã giảm giá phải có ít nhất 3 ký tự")
-    .max(10, "Mã giảm giá không được quá 10 ký tự"),
-  start_date: z.string().optional(),
-  end_date: z.string().optional(),
-  active: z.boolean().optional(),
-  value: z.string().optional(),
-  type: z.string().optional(),
-  courses: z.array(z.string()).optional(),
-  limit: z.number().optional(),
-});
+
 const UpdateCouponForm = ({ data }: { data: TCouponParams }) => {
   const [findCourse, setFindCourse] = useState<any[] | undefined>([]);
   const [selectedCourses, setSelectedCourses] = useState<any[]>([]);
   const [startDate, setStartDate] = useState<Date>(
-    data.start_date || undefined
+    data.start_date || new Date()
   );
-  const [endDate, setEndDate] = useState<Date>(data.end_date || undefined);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [endDate, setEndDate] = useState<Date>(data.end_date || new Date());
+  const form = useForm<z.infer<typeof couponFormSchema>>({
+    resolver: zodResolver(couponFormSchema),
     defaultValues: {
       title: data.title,
       code: data.code,
@@ -77,13 +59,24 @@ const UpdateCouponForm = ({ data }: { data: TCouponParams }) => {
     }
   }, [data.courses]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof couponFormSchema>) {
     try {
+      const couponType = values.type;
+      const couponValue = Number(values.value?.replace(/,/g, ""));
+      if (
+        couponType === ECouponType.PERCENT &&
+        couponValue &&
+        (couponValue > 100 || couponValue < 0)
+      ) {
+        form.setError("value", {
+          message: "Giá trị không hợp lệ",
+        });
+      }
       const updatedCoupon = await updateCoupon({
         _id: data._id,
         updateData: {
           ...values,
-          value: Number(values.value?.replace(/,/g, "")),
+          value: couponValue,
           start_date: startDate,
           end_date: endDate,
           courses: selectedCourses,
@@ -146,6 +139,7 @@ const UpdateCouponForm = ({ data }: { data: TCouponParams }) => {
                     onChange={(e) =>
                       field.onChange(e.target.value.toUpperCase())
                     }
+                    disabled
                   />
                 </FormControl>
                 <FormMessage />
@@ -224,7 +218,7 @@ const UpdateCouponForm = ({ data }: { data: TCouponParams }) => {
                 <FormLabel>Loại coupon</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    defaultValue={ECouponType.PERCENT}
+                    value={field.value}
                     className="flex gap-5"
                     onValueChange={field.onChange}
                   >
@@ -254,7 +248,7 @@ const UpdateCouponForm = ({ data }: { data: TCouponParams }) => {
                     type="number"
                     placeholder="50%"
                     {...field}
-                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) => field.onChange(e.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
