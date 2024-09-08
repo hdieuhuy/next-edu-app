@@ -11,6 +11,7 @@ export interface ICoupon extends Document {
   limit: number;
   courses: Schema.Types.ObjectId[];
   type: ECouponType;
+  used: number;
   value: number;
   created_at: Date;
 }
@@ -43,6 +44,10 @@ const couponSchema = new Schema<ICoupon>({
       ref: "Course",
     },
   ],
+  used: {
+    type: Number,
+    default: 0,
+  },
   type: {
     type: String,
     enum: Object.values(ECouponType),

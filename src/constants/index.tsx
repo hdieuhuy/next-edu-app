@@ -12,7 +12,7 @@ import {
   DocumentIcon,
   EarthIcon,
 } from "@/components/icons";
-import { DatabaseZapIcon } from "lucide-react";
+import { DatabaseZapIcon, TagIcon } from "lucide-react";
 
 const menuItems: TMenuLink[] = [
   {
@@ -29,6 +29,11 @@ const menuItems: TMenuLink[] = [
     href: "/manage/user",
     title: "Quản lý thành viên",
     icon: <UserListIcon />,
+  },
+  {
+    href: "/manage/coupon",
+    title: "Quản lý coupon",
+    icon: <TagIcon className="size-5" />,
   },
   {
     href: "/manage/course",
