@@ -1,15 +1,17 @@
 import { DocumentIcon } from "@/components/icons";
 import { PlayCircleIcon, User } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import ButtonEnroll from "./ButtonEnroll";
+import CouponForm from "./CouponForm";
 
 function CourseWidget({ data, findUser }: { data: any; findUser: any }) {
+  const [price, setPrice] = useState<number>(data.price);
   return (
     <>
       <div className="bg-white rounded-lg p-5 dark:bg-grayDarker dark:border-slate-500">
         <div className="flex items-center gap-2 mb-3">
           <strong className="text-primary text-xl font-bold ">
-            {data.price.toLocaleString()}đ
+            {price.toLocaleString("en-EN")}đ
           </strong>
           <span className="text-slate-400 line-through text-sm ">
             {data.sale_price.toLocaleString()}đ
@@ -40,8 +42,9 @@ function CourseWidget({ data, findUser }: { data: any; findUser: any }) {
         <ButtonEnroll
           user={findUser ? JSON.parse(JSON.stringify(findUser)) : null}
           courseId={data ? JSON.parse(JSON.stringify(data._id)) : null}
-          amount={data.price}
+          amount={price}
         ></ButtonEnroll>
+        <CouponForm price={price} setPrice={setPrice}></CouponForm>
       </div>
     </>
   );
