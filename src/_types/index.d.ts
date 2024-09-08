@@ -1,4 +1,5 @@
 import { ICourse } from "@/databases/corse.model";
+import { ICoupon } from "@/databases/coupon.model";
 import { ILesson } from "@/databases/lesson.model";
 
 type TMenuLink = {
@@ -99,6 +100,13 @@ type TCreateOrderParams = {
   discount?: number;
   coupon?: string;
 };
+type TCreateCouponParams = Omit<ICoupon, "_id created_at">;
+type TCouponParams = Omit<ICoupon, "courses"> & {
+  courses: {
+    _id: string;
+    title: string;
+  }[];
+};
 export {
   TMenuLink,
   TUserCreateData,
@@ -114,4 +122,6 @@ export {
   TGetAllCourseParams,
   TLessonUserStuyding,
   TCreateOrderParams,
+  TCreateCouponParams,
+  TCouponParams,
 };

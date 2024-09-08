@@ -33,7 +33,7 @@ const menuItems: TMenuLink[] = [
   {
     href: "/manage/coupon",
     title: "Quản lý coupon",
-    icon: <TagIcon className="size-5" />,
+    icon: <TagIcon />,
   },
   {
     href: "/manage/course",
