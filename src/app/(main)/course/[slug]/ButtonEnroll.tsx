@@ -10,10 +10,12 @@ const ButtonEnroll = ({
   user,
   courseId,
   amount,
+  coupon,
 }: {
   user: IUser;
   courseId: string;
   amount: number;
+  coupon: string;
 }) => {
   const router = useRouter();
 
@@ -29,7 +31,8 @@ const ButtonEnroll = ({
         user: user._id.toString(),
         course: courseId,
         total: amount,
-        amount: amount,
+        amount,
+        coupon,
       });
 
       if (newOrder.code) {
